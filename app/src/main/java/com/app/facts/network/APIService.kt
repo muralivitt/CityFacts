@@ -7,8 +7,8 @@ import retrofit2.http.POST
 interface APIService {
 
     companion object {
-        const val BASE_URL = ""
-        const val END_POINT = ""
+        const val BASE_URL = "https://dl.dropboxusercontent.com"
+        const val END_POINT = "/s/2iodh4vg0eortkl/facts.json"
     }
 
     @POST(END_POINT)
