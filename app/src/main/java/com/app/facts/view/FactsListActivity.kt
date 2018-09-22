@@ -11,7 +11,6 @@ import com.app.facts.presenter.FactsPresenter
 import kotlinx.android.synthetic.main.activity_facts_list.*
 
 class FactsListActivity : AppCompatActivity(), FactsContract.View {
-
     private var mPresenter: FactsPresenter? = null
     private var mAdapter: CityListAdapter? = null
 
@@ -19,20 +18,30 @@ class FactsListActivity : AppCompatActivity(), FactsContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_facts_list)
         mPresenter = FactsPresenter(this)
+
         mPresenter?.getFactsList()
+        supportActionBar?.subtitle = "Loading.."
     }
 
     override fun init() {
         mAdapter = CityListAdapter(this)
         rvCityFactsList.layoutManager = LinearLayoutManager(this)
         rvCityFactsList.adapter = mAdapter
+
+        vRefreshLayout.setOnRefreshListener {
+            mPresenter?.getFactsList()
+            supportActionBar?.subtitle = "Loading.."
+        }
     }
 
-    override fun onSuccess(list: ArrayList<FactResponse.FactItem>) {
-        mAdapter?.addItems(list)
+    override fun onSuccess(response: FactResponse) {
+        vRefreshLayout.isRefreshing = false
+        supportActionBar?.subtitle = response?.title
+        mAdapter?.addItems(response.rows)
     }
 
     override fun onError(error: String) {
+        supportActionBar?.subtitle = "Failed to load data !"
         println(error)
     }
 }
