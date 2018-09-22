@@ -1,6 +1,8 @@
 package com.app.facts.network
 
 import com.app.facts.network.APIService.Companion.BASE_URL
+import khee.app.vidya.App
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -11,7 +13,11 @@ class APIClient {
     private var retrofit: Retrofit? = null
 
     private fun getClient(): Retrofit {
+        val cacheSize = 10 * 1024 * 1024L // 10 MB
+        val cache = Cache(App.instance.cacheDir, cacheSize)
+
         val client = OkHttpClient.Builder()
+                .cache(cache)  // Enabling API cache
                 .connectTimeout(3, TimeUnit.MINUTES)
                 .writeTimeout(3, TimeUnit.MINUTES)
                 .readTimeout(3, TimeUnit.MINUTES)
