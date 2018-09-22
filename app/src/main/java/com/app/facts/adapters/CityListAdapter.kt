@@ -1,6 +1,7 @@
 package com.app.facts.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.support.annotation.UiThread
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,10 +10,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-
 import com.app.facts.R
 import com.app.facts.network.model.FactResponse
-import com.bumptech.glide.Glide
+import com.app.facts.utils.ImageUtils
+import com.app.facts.view.DetailsActivity
+import com.app.facts.view.DetailsActivity.Companion.FACT_ITEM
 
 class CityListAdapter(private val mContext: Context) : RecyclerView.Adapter<CityListAdapter.MyViewHolder>() {
 
@@ -29,12 +31,12 @@ class CityListAdapter(private val mContext: Context) : RecyclerView.Adapter<City
         var factItem = mCityFactsList[position]
         holder.tvTitle.text = factItem?.title
         holder.tvDescription.text = factItem?.description
-        holder.llCardItem.setOnClickListener { }
+        holder.llCardItem.setOnClickListener {
+            mContext.startActivity(Intent(mContext, DetailsActivity::class.java)
+                    .putExtra(FACT_ITEM, factItem))
+        }
 
-        Glide.with(mContext)
-                .load(factItem?.imageHref)
-                .centerCrop()
-                .into(holder.ivThumbnail)
+        ImageUtils.loadImage(factItem?.imageHref,holder.ivThumbnail)
     }
 
     override fun getItemCount(): Int {
