@@ -41,6 +41,7 @@ class FactsListActivity : AppCompatActivity(), FactsContract.View {
     }
 
     override fun onError(error: String) {
+        vRefreshLayout.isRefreshing = false
         supportActionBar?.subtitle = "Failed to load data !"
         println(error)
     }
