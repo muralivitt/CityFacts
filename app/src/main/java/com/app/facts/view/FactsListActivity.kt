@@ -17,10 +17,14 @@ class FactsListActivity : AppCompatActivity(), FactsContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_facts_list)
+
+        setSupportActionBar(toolbar)
+
         mPresenter = FactsPresenter(this)
 
+
+        toolbar?.subtitle = resources.getString(R.string.loading)
         mPresenter?.getFactsList()
-        supportActionBar?.subtitle = "Loading.."
     }
 
     override fun init() {
@@ -29,8 +33,8 @@ class FactsListActivity : AppCompatActivity(), FactsContract.View {
         rvCityFactsList.adapter = mAdapter
 
         vRefreshLayout.setOnRefreshListener {
+            supportActionBar?.subtitle = resources.getString(R.string.loading)
             mPresenter?.getFactsList()
-            supportActionBar?.subtitle = "Loading.."
         }
     }
 
@@ -42,7 +46,7 @@ class FactsListActivity : AppCompatActivity(), FactsContract.View {
 
     override fun onError(error: String) {
         vRefreshLayout.isRefreshing = false
-        supportActionBar?.subtitle = "Failed to load data !"
+        supportActionBar?.subtitle = error
         println(error)
     }
 }
